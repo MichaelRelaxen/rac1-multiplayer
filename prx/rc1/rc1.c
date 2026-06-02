@@ -127,7 +127,11 @@ int cellGameBootCheckHook(unsigned int* type, unsigned int* attributes, CellGame
     // Check if digital version exists and use that. Otherwise fall back to disc. If no disc then we just crash
     CellFsErrno ebootStat = cellFsOpendir("/dev_hdd0/game/NPEA00385/", &fd);
     if (ebootStat == CELL_FS_ENOENT) {
-        src = "BCES01503";
+        if (cellFsOpendir("/dev_hdd0/game/NPUA80643/", &fd) == CELL_FS_ENOENT) {
+            src = "BCES01503";
+        } else {
+            src = "NPUA80643";
+        }
     } else {
         src = "NPEA00385";
     }
@@ -154,7 +158,11 @@ int cellGameContentPermitHook(char* contentInfoPath, char* usrdirPath) {
     CellFsErrno ebootStat = cellFsOpendir("/dev_hdd0/game/NPEA00385/", &fd);
     if (ebootStat == CELL_FS_ENOENT) {
         if (cellFsOpendir("/dev_hdd0/game/BCES01503/", &fd) == CELL_FS_ENOENT) {
-            src = "/dev_bdvd/PS3_GAME";
+            if (cellFsOpendir("/dev_hdd0/game/NPUA80643/", &fd) == CELL_FS_ENOENT) {
+                src = "/dev_bdvd/PS3_GAME";
+            } else {
+                src = "/dev_hdd0/game/NPUA80643";
+            }
         } else {
             src = "/dev_hdd0/game/BCES01503";
         }
