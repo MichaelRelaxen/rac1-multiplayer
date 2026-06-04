@@ -103,20 +103,32 @@ void Game::on_tick() {
         previous_user_option_camera_left_right_movement = user_option_camera_left_right_movement;
         previous_user_option_camera_up_down_movement = user_option_camera_up_down_movement;
         previous_user_option_camera_rotation_speed = user_option_camera_rotation_speed;
+        previous_option_music_volume = option_music_volume;
+        previous_option_sound_volume = option_sound_volume;
     }
 
     if (previous_user_option_camera_left_right_movement != user_option_camera_left_right_movement ||
     previous_user_option_camera_up_down_movement != user_option_camera_up_down_movement ||
-    previous_user_option_camera_rotation_speed != user_option_camera_rotation_speed) {
+    previous_user_option_camera_rotation_speed != user_option_camera_rotation_speed ||
+    previous_option_music_volume != option_music_volume ||
+    previous_option_sound_volume != option_sound_volume
+
+    ) {
         previous_user_option_camera_left_right_movement = user_option_camera_left_right_movement;
         previous_user_option_camera_up_down_movement = user_option_camera_up_down_movement;
         previous_user_option_camera_rotation_speed = user_option_camera_rotation_speed;
+        previous_option_music_volume = option_music_volume;
+        previous_option_sound_volume = option_sound_volume;
 
         PersistentStorage storage = PersistentStorage("settings.conf");
 
         storage.set("user_option_camera_left_right_movement", user_option_camera_left_right_movement);
         storage.set("user_option_camera_up_down_movement", user_option_camera_up_down_movement);
         storage.set("user_option_camera_rotation_speed", user_option_camera_rotation_speed);
+
+        storage.set("option_music_volume", option_music_volume);
+        storage.set("option_sound_volume", option_sound_volume);
+
     }
 
     // Pass inputs to the current view and send to server
@@ -165,6 +177,12 @@ void Game::before_player_spawn() {
                 user_option_camera_up_down_movement = storage.get_int("user_option_camera_up_down_movement");
             if (storage.index_of("user_option_camera_rotation_speed") >= 0)
                 user_option_camera_rotation_speed = storage.get_int("user_option_camera_rotation_speed");
+
+            if (storage.index_of("option_music_volume") >= 0)
+                option_music_volume = storage.get_int("option_music_volume");
+
+            if (storage.index_of("option_sound_volume") >= 0)
+                option_sound_volume = storage.get_int("option_sound_volume");
 
             restored_camera_options_ = true;
         }

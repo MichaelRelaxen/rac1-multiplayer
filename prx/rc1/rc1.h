@@ -293,6 +293,8 @@ extern int user_option_camera_up_down_movement;
 extern int user_option_camera_rotation_speed;
 extern bool option_helpdesk_voice;
 extern bool option_helpdesk_text;
+extern int option_music_volume;
+extern int option_sound_volume;
 
 extern u8 latin_glyph_sizes;
 
