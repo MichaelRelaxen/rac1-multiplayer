@@ -437,7 +437,7 @@ int custom_item(int id) {
 	if(id == 0x28) return 123; // PREMIUM NANOTECH
 	if(id == 0x29) return 124; // ULTRA NANOTECH
 	if(id == 0x2a) return 10;  // BOLT
-	if(id == 0x2b) return 134; // FISH
+	if(id == 0x2b) return 134; // FISH   
 	if(id == 0x2c) return 217; // Infobot
 	if(id == 0x2d) return 215;
 	return 0;
