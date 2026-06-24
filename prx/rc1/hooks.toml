@@ -91,3 +91,15 @@ replaced_instr = "stdu r1, -0x80(r1)"
 [_moby_get_damage]
 addr = 0x10675c
 replaced_instr = "cmpwi cr1, r5, 0x0"
+
+[vendorhack_icon_scroll]
+addr = 0x17040c
+replaced_instr = "bl 0xca3e4"
+
+[vendorhack_icon_loop]
+addr = 0x170240
+replaced_instr = "bl 0xca3e4"
+
+[vendorhack_item_string]
+addr = 0x170960
+replaced_instr = "bl 0x7b740"

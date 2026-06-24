@@ -340,3 +340,11 @@ instructions = [
     "addic r3, r3, 0x40",
     "lbz r3, 0x1(r3)"
 ]
+
+
+# makes vendor only spawn the chicken moby (0x10e)
+0x16c7cc = "nop"
+0x16c7d0 = "li r28, 0x10e"
+
+# ammo spawn class override
+0x16cb28 = "li r4, 0x10e"

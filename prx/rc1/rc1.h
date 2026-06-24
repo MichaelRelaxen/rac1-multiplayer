@@ -45,11 +45,21 @@ typedef struct {
     u16 flags;
 } TextOpt;
 
-// Our global variables
+typedef struct {
+    uint32_t weaponId;
+    uint8_t  unlocked;
+    uint8_t  unk1[3];
+    uint32_t unk2;
+    uint32_t unk3;
+} VendorItem;
+
+#define vendorItems        ((VendorItem*)0x00e5a720)
+#define vendorItemsCount   (*(uint32_t*)0x00e5a820)
+#define vendorSelectedIndex (*(int*)    0x00e5a6a8)
+
 extern int game_ticks;
 
 extern int current_weapon;
-
 
 #define metal_detector_bolt_multiplier ((u8*)0xB00000)
 #define proxy_item_array ((u8*)0xB00002)
@@ -79,6 +89,8 @@ SHK_FUNCTION_DEFINE_STATIC_4(0x7100c, void, _draw_text_opt, TextOpt*, text_opt, 
 SHK_FUNCTION_DEFINE_STATIC_2(0xef810, void, init_moby, Moby*, moby, u16, o_class);
 SHK_FUNCTION_DEFINE_STATIC_2(0x65490, void, world_pos_to_screen_pos, Vec4*, out_screen_pos, Vec4*, world_pos);
 SHK_FUNCTION_DEFINE_STATIC_5(0x57820, int, coll_line, Vec4*, position1, Vec4*, position2, int, flags, Moby*, moby, Vec4*, unk_vec);
+SHK_FUNCTION_DEFINE_STATIC_2(0xca3e4, int, lookup_icon_texture, uint16_t, id, int, mode);
+SHK_FUNCTION_DEFINE_STATIC_1(0x07b740, char*, get_ui_string, int, string_id);
 
 void draw_text_opt(TextOpt* text_opt, Color color, char* text, ssize_t len, float text_size);
 
@@ -208,35 +220,22 @@ struct MetalDetectorSpotVars {
     int bolts;
 };
 
-//
-// Various global variables
-//
-
 extern bool use_custom_player_color;
 extern uint32_t custom_player_color;
 
-//
-// Game-global variables
-//
-
-// If the game should start loading the planet sepcified in `destination_planet`
 extern bool should_load_destination_planet;
 
-// The currently loaded planet.
 extern int current_planet;
 
-// Destination planet to load
 extern int destination_planet;
 
 extern u8 seen_planets[];
 
-// Game state
 extern GameState game_state;
 
 extern int gadgetron_state;
 extern int last_vendor_was_pda;
 
-// Frames since death/reload
 extern int frame_count;
 
 extern u32 n_frames_grounded;
@@ -250,23 +249,13 @@ extern MobyClass** mclass_table;
 
 extern Moby* ratchets_ship;
 
-// player
-
-// The player's current bolt count.
 extern int player_bolts;
-// The player's current position.
 extern Vec4 player_pos;
-// The player's current rotation in radians. Z is the most commonly used axis.
 extern Vec4 player_rot;
-// The player's neutral momentum.
 extern float player_neutral;
-// The frames until "Ghost Ratchet" will run out.
 extern int player_ghost_frames;
-// The player's current state.
 extern int player_state;
-// The player's current input(?) state
 extern int player_state_input;
-// The player's current HP.
 extern int player_health;
 
 extern short remove_clank_backpack;
@@ -308,7 +297,6 @@ Moby* spawn_moby(u16 o_class);
 struct Damage* moby_get_damage(Moby* moby, u32 flags, u32 unk);
 
 #ifdef __cplusplus
-// Pointer to Ratchet moby.
 extern Moby *ratchet_moby;
 extern CollOutput* coll_output;
 extern int n_coll_mobys;

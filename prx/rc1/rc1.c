@@ -21,6 +21,7 @@ EnableCommunicationsFlags enable_communication_bitmap = (EnableCommunicationsFla
         ENABLE_ON_GET_BOLTS | ENABLE_ON_PICKUP_GOLD_BOLT | ENABLE_ON_UNLOCK_ITEM | ENABLE_ON_UNLOCK_LEVEL
 );
 
+
 extern "C" {
 void game_tick() {
     _c_game_tick();
@@ -428,6 +429,66 @@ void draw_text_opt(TextOpt* text_opt, Color color, char* text, ssize_t len, floa
     _draw_text_opt(text_opt, color.to_u32(), text, len);
 }
 
+int custom_item(int id) {
+	if(id == 0x24) return 117; // ZOOMERATOR
+	if(id == 0x25) return 118; // RARITANIUM
+	if(id == 0x26) return 119; // CODEBOT
+	if(id == 0x27) return 120; // PERSUADER
+	if(id == 0x28) return 123; // PREMIUM NANOTECH
+	if(id == 0x29) return 124; // ULTRA NANOTECH
+	if(id == 0x2a) return 10;  // BOLT
+	if(id == 0x2b) return 134; // FISH
+	if(id == 0x2c) return 217; // Infobot
+	if(id == 0x2d) return 215;
+	return 0;
+}
+
+SHK_HOOK(int, vendorhack_icon_loop, uint16_t, id, int, mode);
+int vendorhack_icon_loop_hook(uint16_t id, int mode) {
+    register int r29 asm("r29");
+    int i = r29;
+
+    if (i >= 0 && i < vendorItemsCount) {
+        int item = vendorItems[i].weaponId;
+        if (item >= 0x24) {
+            return custom_item(item);
+        }
+    }
+
+    return SHK_CALL_HOOK(vendorhack_icon_loop, id, mode);
+}
+
+SHK_HOOK(int, vendorhack_icon_scroll, uint16_t, id, int, mode);
+int vendorhack_icon_scroll_hook(uint16_t id, int mode) {
+    register int r29 asm("r29");
+    int i = r29;
+
+    int weapon_idx = vendorItemsCount * 2 + i + vendorSelectedIndex + -3;
+    weapon_idx -= (weapon_idx / vendorItemsCount) * vendorItemsCount;
+
+    int item = vendorItems[weapon_idx].weaponId;
+    if (item >= 0x24) {
+        return custom_item(item);
+    }
+    
+    return SHK_CALL_HOOK(vendorhack_icon_scroll, id, mode);
+}
+
+SHK_HOOK(char*, vendorhack_item_string, int, string_id);
+char* vendorhack_item_string_hook(int id) {
+    int item = vendorItems[vendorSelectedIndex].weaponId;
+    if(item == 0x24) id = 0x4E74; // ZOOMERATOR
+    if(item == 0x25) id = 0x4E75; // RARITANIUM
+    if(item == 0x26) id = 0x4E77; // CODEBOT
+    if(item == 0x27) id = 0x4E73; // PERSUADER
+    if(item == 0x28) id = 0x4E71; // PREMIUM NANOTECH
+    if(item == 0x29) id = 0x4E72; // ULTRA NANOTECH
+    if(item == 0x2A) id = 0x4E9F; // BOLT
+    if(item == 0x2C) id = 0x4E7C; // Infobot
+    return SHK_CALL_HOOK(vendorhack_item_string, id);
+}
+
+
 void rc1_init() {
     MULTI_LOG("Multiplayer initializing.\n");
 
@@ -453,6 +514,9 @@ void rc1_init() {
     SHK_BIND_HOOK(bink_do_frame, bink_do_frame_hook);
     SHK_BIND_HOOK(perform_save_action, perform_save_action_hook);
     SHK_BIND_HOOK(init_gameplay, init_gameplay_hook);
+    SHK_BIND_HOOK(vendorhack_icon_loop, vendorhack_icon_loop_hook);
+    SHK_BIND_HOOK(vendorhack_icon_scroll, vendorhack_icon_scroll_hook);
+    SHK_BIND_HOOK(vendorhack_item_string, vendorhack_item_string_hook);
 
     MULTI_LOG("Bound hooks\n");
 }
