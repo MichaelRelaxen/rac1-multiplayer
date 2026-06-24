@@ -45,6 +45,7 @@ typedef struct {
     u16 flags;
 } TextOpt;
 
+// Our global variables
 typedef struct {
     uint32_t weaponId;
     uint8_t  unlocked;
