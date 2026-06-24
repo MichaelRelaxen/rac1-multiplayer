@@ -443,7 +443,7 @@ int custom_item(int id) {
 	return 0;
 }
 
-SHK_HOOK(int, vendorhack_icon_loop, uint16_t, id, int, mode);
+SHK_HOOK(int, vendorhack_icon_loop, uint16_t, int);
 int vendorhack_icon_loop_hook(uint16_t id, int mode) {
     register int r29 asm("r29");
     int i = r29;
@@ -458,7 +458,7 @@ int vendorhack_icon_loop_hook(uint16_t id, int mode) {
     return SHK_CALL_HOOK(vendorhack_icon_loop, id, mode);
 }
 
-SHK_HOOK(int, vendorhack_icon_scroll, uint16_t, id, int, mode);
+SHK_HOOK(int, vendorhack_icon_scroll, uint16_t, int);
 int vendorhack_icon_scroll_hook(uint16_t id, int mode) {
     register int r29 asm("r29");
     int i = r29;
@@ -474,7 +474,7 @@ int vendorhack_icon_scroll_hook(uint16_t id, int mode) {
     return SHK_CALL_HOOK(vendorhack_icon_scroll, id, mode);
 }
 
-SHK_HOOK(char*, vendorhack_item_string, int, string_id);
+SHK_HOOK(char*, vendorhack_item_string, int);
 char* vendorhack_item_string_hook(int id) {
     int item = vendorItems[vendorSelectedIndex].weaponId;
     if(item == 0x24) id = 0x4E74; // ZOOMERATOR
