@@ -443,10 +443,27 @@ int custom_item(int id) {
 	return 0;
 }
 
+static inline void fix_vendor_return(void)
+{
+    register void *sp asm("r1");
+
+    uint64_t *caller_frame = *(uint64_t **)sp;
+
+    if (!caller_frame)
+        return;
+
+    uint64_t *saved_lr = (uint64_t *)((uint8_t *)caller_frame + 0x10);
+
+    if (*saved_lr == 0x170260)
+        *saved_lr = 0x170244;
+}
+
 SHK_HOOK(int, vendorhack_icon_loop, uint16_t, int);
 int vendorhack_icon_loop_hook(uint16_t id, int mode) {
     register int r29 asm("r29");
     int i = r29;
+
+    fix_vendor_return();
 
     if (i >= 0 && i < vendorItemsCount) {
         int item = vendorItems[i].weaponId;
