@@ -455,7 +455,7 @@ int vendorhack_icon_loop_hook(uint16_t id, int mode) {
         }
     }
 
-    return SHK_CALL_HOOK(vendorhack_icon_loop, id, mode);
+    return lookup_icon_texture(vendorhack_icon_loop, id, mode);
 }
 
 SHK_HOOK(int, vendorhack_icon_scroll, uint16_t, int);
@@ -471,7 +471,7 @@ int vendorhack_icon_scroll_hook(uint16_t id, int mode) {
         return custom_item(item);
     }
     
-    return SHK_CALL_HOOK(vendorhack_icon_scroll, id, mode);
+    return lookup_icon_texture(vendorhack_icon_scroll, id, mode);
 }
 
 SHK_HOOK(char*, vendorhack_item_string, int);
@@ -485,7 +485,7 @@ char* vendorhack_item_string_hook(int id) {
     if(item == 0x29) id = 0x4E72; // ULTRA NANOTECH
     if(item == 0x2A) id = 0x4E9F; // BOLT
     if(item == 0x2C) id = 0x4E7C; // Infobot
-    return SHK_CALL_HOOK(vendorhack_item_string, id);
+    return get_ui_string(vendorhack_item_string, id);
 }
 
 
