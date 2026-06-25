@@ -80,6 +80,7 @@ all:
 # build sprx
 	cd "$(PRX_DIR)" && "$(MAKE)" sprx GAME=$(GAME)
 	cp "$(PRX_BUILD_OUT_DIR)/mod.sprx" "$(GAME_DIR)"
+	cp "$(PRX_OUT_DIR)/mod.elf" "$(BIN_DIR)/mod.elf"
 
 # make launcher app
 	cd "$(APP_DIR)" && "$(MAKE)" eboot

@@ -95,3 +95,14 @@ jobs:
           asset_path: ./build/BDUPS3-BORD00001_00-0000000000000000.pkg
           asset_name: BDUPS3-BORD00001_00-0000000000000000.pkg
           asset_content_type: application/zip
+
+      - name: Upload mod.elf
+        id: upload-mod-elf
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/mod.elf
+          asset_name: mod.elf
+          asset_content_type: application/octet-stream
